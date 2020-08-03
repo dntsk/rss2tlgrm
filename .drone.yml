@@ -8,6 +8,7 @@ steps:
     image: docker
     commands:
       - docker build -t rg.nl-ams.scw.cloud/silvergh0st/rss2tlgrm:${DRONE_COMMIT_BRANCH} .
+      - docker push rg.nl-ams.scw.cloud/silvergh0st/rss2tlgrm:${DRONE_COMMIT_BRANCH}
     volumes:
       - name: cache
         path: /root/.cache/pip
