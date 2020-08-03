@@ -5,7 +5,7 @@ import telebot
 import os
 
 from django_cron import CronJobBase, Schedule
-from .models import Feed, Channel
+from .models import Feed
 
 
 class FetchRSS(CronJobBase):
@@ -18,14 +18,13 @@ class FetchRSS(CronJobBase):
         bot = telebot.TeleBot(os.getenv("TOKEN"))
         feeds = Feed.objects.all()
         for f in feeds:
-            channel = Channel.objects.get(pk=f.channel_id)
             d = feedparser.parse(f.feed)
             for i in d.entries:
                 if i.link != f.last_item:
                     link = i.link.split('?')[0]
-                    print(f'{channel.tg_id}: {i.title} {link}')
+                    print(f'{i.channel}: {i.title} {link}')
                     message = f"{i.title}\n\n{link}"
-                    # bot.send_message(f'@{channel.tg_id}', message)
+                    bot.send_message(f'@{i.channel}', message)
                     time.sleep(1)
                 else:
                     break
