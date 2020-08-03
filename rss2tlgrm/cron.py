@@ -22,9 +22,9 @@ class FetchRSS(CronJobBase):
             for i in d.entries:
                 if i.link != f.last_item:
                     link = i.link.split('?')[0]
-                    print(f'{i.channel}: {i.title} {link}')
+                    print(f'{f.channel}: {i.title} {link}')
                     message = f"{i.title}\n\n{link}"
-                    bot.send_message(f'@{i.channel}', message)
+                    bot.send_message(f'@{f.channel}', message)
                     time.sleep(1)
                 else:
                     break
