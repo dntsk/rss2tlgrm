@@ -49,6 +49,7 @@ steps:
       port: 22
       script:
         - cd /opt
+        - docker-compose pull rss2tlgrm
         - docker-compose up -d --remove-orphans rss2tlgrm
 
 trigger:
