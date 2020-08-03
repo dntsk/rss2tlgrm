@@ -1,0 +1,82 @@
+---
+kind: pipeline
+type: docker
+name: build
+
+steps:
+  - name: build
+    image: docker
+    commands:
+      - docker build -t rg.nl-ams.scw.cloud/silvergh0st/rss2tlgrm:${DRONE_COMMIT_BRANCH} .
+    volumes:
+      - name: cache
+        path: /root/.cache/pip
+      - name: docker_sock
+        path: /var/run/docker.sock
+      - name: docker_config
+        path: /root/.docker
+
+volumes:
+  - name: cache
+    host:
+      path: /opt/docker/drone/cache
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+  - name: docker_config
+    host:
+      path: /root/.docker
+
+trigger:
+  branch:
+    - master
+
+---
+kind: pipeline
+type: docker
+name: deploy
+
+steps:
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host: 172.20.0.2
+      username:
+        from_secret: ssh_username
+      key:
+        from_secret: ssh_key
+      port: 22
+      script:
+        - cd /opt
+        - docker-compose up -d --remove-orphans rss2tlgrm
+
+trigger:
+  branch:
+    - master
+
+depends_on:
+  - build
+
+---
+kind: pipeline
+type: docker
+name: notifications
+
+steps:
+  - name: telegram
+    pull: always
+    image: appleboy/drone-telegram
+    settings:
+      message: "{{#success build.status}} ✅  Build #{{build.number}} of `{{repo.name}}` succeeded.\n\n📝 Commit by {{commit.author}} on `{{commit.branch}}`:\n``` {{commit.message}} ```\n\n🌐 {{ build.link }} {{else}} ❌  Build #{{build.number}} of `{{repo.name}}` failed.\n\n📝 Commit by {{commit.author}} on `{{commit.branch}}`:\n``` {{commit.message}} ```\n\n🌐 {{ build.link }} {{/success}}\n"
+      to:
+        from_secret: telegram_to
+      token:
+        from_secret: telegram_token
+
+trigger:
+  status:
+    - success
+    - failure
+
+depends_on:
+  - deploy
