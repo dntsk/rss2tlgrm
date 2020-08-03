@@ -15,7 +15,7 @@ class FetchRSS(CronJobBase):
     code = 'rss2tlgrm.parser'
 
     def do(self):
-        bot = telebot.TeleBot(os.getenv("TOKEN"))
+        bot = telebot.TeleBot(os.getenv("TGBOT_TOKEN"))
         feeds = Feed.objects.all()
         for f in feeds:
             d = feedparser.parse(f.feed)
