@@ -40,7 +40,7 @@ steps:
   - name: deploy
     image: appleboy/drone-ssh
     settings:
-      host: 172.20.0.2
+      host: cloud.lyalyuev.info
       username:
         from_secret: ssh_username
       key:
