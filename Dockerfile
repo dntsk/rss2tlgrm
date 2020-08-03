@@ -25,3 +25,4 @@ EXPOSE 8000
 CMD ["./start.sh"]
 
 ADD . /opt
+RUN mkdir /opt/static
