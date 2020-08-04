@@ -11,3 +11,9 @@ class Feed(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Post(models.Model):
+    id = models.AutoField(primary_key=True)
+    url = models.URLField()
+    date = models.DateTimeField(auto_now=True)

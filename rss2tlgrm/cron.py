@@ -5,7 +5,7 @@ import telebot
 import os
 
 from django_cron import CronJobBase, Schedule
-from .models import Feed
+from .models import Feed, Post
 
 
 class FetchRSS(CronJobBase):
@@ -22,15 +22,17 @@ class FetchRSS(CronJobBase):
                 print(f'Processing {f.name}.')
                 d = feedparser.parse(f.feed)
                 for i in d.entries[:20]:
-                    if i.link != f.last_item:
+                    try:
+                        p = Post.objects.get(url__exact=i.link)
+                    except Post.DoesNotExist:
+                        p = None
+                    if p is None:
                         link = i.link.split('?')[0]
                         print(f'{f.channel}: {i.title} {link}')
+                        p = Post(url=i.link)
+                        p.save()
                         message = f"{i.title}\n\n{link}"
-                        bot.send_message(f'@{f.channel}', message)
+                        # bot.send_message(f'@{f.channel}', message)
                         time.sleep(10)
-                    else:
-                        break
-                f.last_item = d.entries[0].link
-                f.save()
             else:
                 print(f'Skipping "{f.name}" due to not active.')
