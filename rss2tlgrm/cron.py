@@ -33,6 +33,6 @@ class FetchRSS(CronJobBase):
                         p.save()
                         message = f"{i.title}\n\n{link}"
                         # bot.send_message(f'@{f.channel}', message)
-                        time.sleep(10)
+                        # time.sleep(10)
             else:
                 print(f'Skipping "{f.name}" due to not active.')
