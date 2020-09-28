@@ -1,4 +1,4 @@
-feedparser==5.2.1
+feedparser==6.0.1
 django==3.0.9
 django_cron==0.5.1
 requests==2.24.0
