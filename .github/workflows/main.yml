@@ -1,0 +1,49 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  Build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pip
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} rg.nl-ams.scw.cloud/silvergh0st
+
+      - name: Build image
+        run: docker build -t rg.nl-ams.scw.cloud/silvergh0st/rss2tlgrm:master .
+
+      - name: Push image
+        run: docker push rg.nl-ams.scw.cloud/silvergh0st/rss2tlgrm:master
+
+  Deploy:
+    runs-on: self-hosted
+    needs: Build
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker-compose -f /opt/docker-compose.yml pull rss2tlgrm
+            docker-compose -f /opt/docker-compose.yml up -d --remove-orphans
