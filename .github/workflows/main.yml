@@ -12,12 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache node modules
+      - name: Cache python modules
         uses: actions/cache@v2
         env:
           cache-name: cache-pip
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
           path: ~/.cache/pip
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
