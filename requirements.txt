@@ -3,5 +3,5 @@ django==3.2.3
 django_cron==0.5.1
 requests==2.25.1
 gunicorn==20.1.0
-pytelegrambotapi==3.7.7
+pytelegrambotapi==3.7.9
 whitenoise==5.2.0
