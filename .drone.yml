@@ -16,6 +16,15 @@ steps:
         path: /var/run/docker.sock
       - name: docker_config
         path: /root/.docker
+  - name: docker_security_checks
+    image: goodwithtech/dockle
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+      - name: docker_config
+        path: /root/.docker
+    commands:
+      - "dockle registry.dntsk.dev/kotanlikebot:${DRONE_COMMIT_BRANCH}"
 
 volumes:
   - name: cache
