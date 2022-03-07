@@ -127,3 +127,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 CRON_CLASSES = [
     "rss2tlgrm.cron.FetchRSS",
 ]
+
+CSRF_TRUSTED_ORIGINS = ['https://rss.lyalyuev.info']
