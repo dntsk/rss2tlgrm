@@ -1,3 +1,4 @@
 .git
 partners_utf.yml
 venv
+db.sqlite3
