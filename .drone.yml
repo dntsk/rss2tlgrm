@@ -7,8 +7,8 @@ steps:
   - name: build
     image: docker
     commands:
-      - docker build -t dntskdev/rss2tlgrm:${DRONE_COMMIT_BRANCH} .
-      - docker push dntskdev/rss2tlgrm:${DRONE_COMMIT_BRANCH}
+      - docker build -t dntskdev/rss2tlgrm:latest .
+      - docker push dntskdev/rss2tlgrm:latest
     volumes:
       - name: cache
         path: /root/.cache/pip
@@ -42,7 +42,8 @@ steps:
     image: docker
     commands:
       - docker build -t dntskdev/rss2tlgrm:${DRONE_TAG} .
-      - docker push dntskdev/rss2tlgrm:${DRONE_TAG}
+      - docker tag dntskdev/rss2tlgrm:${DRONE_TAG} dntskdev/rss2tlgrm:latest
+      - docker push dntskdev/rss2tlgrm:${DRONE_TAG} dntskdev/rss2tlgrm:latest
     volumes:
       - name: cache
         path: /root/.cache/pip
