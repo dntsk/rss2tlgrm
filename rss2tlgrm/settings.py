@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'rss2tlgrm.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'),
     }
 }
 
@@ -128,4 +128,4 @@ CRON_CLASSES = [
     "rss2tlgrm.cron.FetchRSS",
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://rss.lyalyuev.info']
+CSRF_TRUSTED_ORIGINS = [os.getenv('BOT_URL', 'https://rss.lyalyuev.info')]

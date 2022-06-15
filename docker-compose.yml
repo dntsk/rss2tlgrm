@@ -1,0 +1,58 @@
+version: '3.0'
+
+services:
+  traefik:
+    image: traefik:v2.0
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+      - "--serverstransport.insecureskipverify=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=http"
+      - "--certificatesresolvers.myresolver.acme.email=your@email.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:[a-z-.]+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=http"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "127.0.0.1:8088:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/docker/traefik/acme.json:/acme.json
+      - /etc/resolv.conf:/etc/resolv.conf
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  rss2tlgrm:
+    image: dntskdev/rss2tlgrm:latest
+    hostname: rss2tlgrm
+    container_name: rss2tlgrm
+    restart: always
+    environment:
+      - TGBOT_TOKEN=Change_This_To_Your_Bot_Token
+      - BOT_URL=https://rss.exemaple.com/
+      - SECRET_KEY=Change_This_To_Your_Secret_Key
+    volumes:
+      - /opt/docker/rss2tlgrm/db.sqlite3:/opt/db.sqlite3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rss2tlgrm-opt.rule=Host(`rss.example.com`)"
+      - "traefik.http.routers.rss2tlgrm-opt.entrypoints=https"
+      - "traefik.http.routers.rss2tlgrm-opt.tls.certresolver=myresolver"
