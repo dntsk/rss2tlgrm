@@ -34,3 +34,9 @@ docker-compose exec -ti rss2tlgrm ./manage.py createsuperuser
 Open your bot URL in browser adding `/admin/` in the end and login with admin account.
 
 Your URL should look like this: https://rss.example.com/admin/
+
+## Have it working
+
+Create new channel and add your bot to it as administrator with write permissions. It doesn't need more permissions, just write messages in channel.
+
+Login to the bot's admin URL with created admin account and add your RSS feeds with posting to your channel.
