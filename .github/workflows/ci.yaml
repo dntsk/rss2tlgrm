@@ -29,6 +29,4 @@ jobs:
         with:
           context: .
           push: true
-          tags:
-            - dntskdev/rss2tlgrm:latest
-            - dntskdev/rss2tlgrm:$GITHUB_SHA
+          tags: dntskdev/rss2tlgrm:latest,dntskdev/rss2tlgrm:$GITHUB_SHA
