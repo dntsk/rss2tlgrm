@@ -31,4 +31,4 @@ jobs:
           push: true
           tags: |
             dntskdev/rss2tlgrm:latest
-            dntskdev/rss2tlgrm:$GITHUB_SHA
+            dntskdev/rss2tlgrm:${{ github.sha }}
