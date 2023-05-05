@@ -1,7 +1,7 @@
 feedparser==6.0.10
 django==4.2.1
 django_cron==0.6.0
-requests==2.29.0
+requests==2.30.0
 gunicorn==20.1.0
 pytelegrambotapi==4.11.0
 whitenoise==6.4.0
