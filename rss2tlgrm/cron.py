@@ -31,7 +31,9 @@ class FetchRSS(CronJobBase):
                         print(f'{f.channel}: {i.title} {link}')
                         p = Post(url=i.link)
                         p.save()
-                        message = f"{i.title}\n\n{i.description}\n\n{link}"
+                        message = f"{i.title}\n\n{link}"
+                        if f.publish_description:
+                            message = f"{i.title}\n\n{i.description}\n\n{link}"
                         bot.send_message(f'@{f.channel}', message)
                         time.sleep(10)
             else:
