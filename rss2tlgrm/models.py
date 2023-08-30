@@ -7,6 +7,7 @@ class Feed(models.Model):
     feed = models.URLField()
     active = models.BooleanField(default=True)
     channel = models.CharField(max_length=100)
+    publish_description = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

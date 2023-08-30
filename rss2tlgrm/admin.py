@@ -3,7 +3,7 @@ from .models import Feed, Post
 
 
 class FeedAdmin(admin.ModelAdmin):
-    list_display = ('name', 'feed', 'channel', 'active')
+    list_display = ('name', 'feed', 'channel', 'active', 'publish_description')
 
 
 class PostAdmin(admin.ModelAdmin):
