@@ -1,5 +1,5 @@
 feedparser==6.0.10
-django==4.2.8
+django==5.0.1
 django_cron==0.6.0
 requests==2.31.0
 gunicorn==21.2.0
